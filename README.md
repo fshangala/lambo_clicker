@@ -1,16 +1,45 @@
-# lambo_clicker
+# Lambo Clicker
 
-A new Flutter project.
+Lambo Clicker is a Flutter app intended to turn a mobile device into a remote
+clicker. Pressing the volume-up button on mobile sends a click event over a
+WebSocket connection to desktop clients.
 
-## Getting Started
+## Current status
 
-This project is a starting point for a Flutter application.
+The app currently displays placeholder mobile and desktop screens. Volume-button
+handling, WebSocket communication, click execution, and the architecture below
+are not yet implemented.
 
-A few resources to get you started if this is your first Flutter project:
+## Project architecture
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+The project follows these standards as it is developed:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Use MVVM, with views for presentation and view models for presentation logic
+  and state. Keep one main class per file; related helper classes may share that
+  file.
+- Use a modern design with a separate, centralized theme. All styles, colors,
+  and fonts must come from the theme, not hard-coded values in the app.
+- Use `MultiProvider` for dependency and state provisioning. An `AppViewModel`
+  owns global state that is not specific to a view.
+- Load app configuration from `.env` using `flutter_dotenv`. Persist settings
+  configured at runtime using `shared_preferences`.
+- Log errors using `logger`.
+
+## Getting started
+
+Install the [Flutter SDK](https://docs.flutter.dev/get-started/install) and
+configure a supported development target. From the project root:
+
+```sh
+flutter pub get
+flutter run
+```
+
+Select a device when prompted. The current platform selection treats Android as
+mobile and other targets as desktop; this does not imply the remote-clicker
+features are supported yet.
+
+The repository includes `.env-example` as a starting point for local
+configuration. Copy it to `.env` and adjust the values for your environment
+when configuration loading is implemented. `.env` is ignored by Git; do not put
+secrets in a Flutter app's bundled assets.
