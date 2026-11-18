@@ -26,5 +26,11 @@
 ## Product intent
 
 - A mobile volume-up press should send a click event to desktop clients over a
-  WebSocket connection. The current screens are placeholders; do not assume the
-  click flow or the architecture above is already implemented.
+  WebSocket connection. The desktop receiver and click execution are not yet
+  implemented.
+
+## Validation
+
+- Do not create or run tests.
+- First run `dart format` on affected Dart code and resolve formatting issues.
+  Then run `flutter analyze` and resolve issues related to the changes.

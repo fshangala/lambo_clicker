@@ -6,9 +6,9 @@ WebSocket connection to desktop clients.
 
 ## Current status
 
-The app currently displays placeholder mobile and desktop screens. Volume-button
-handling, WebSocket communication, click execution, and the architecture below
-are not yet implemented.
+Android can connect to a LAMBO Server room and send a click event when volume up
+is pressed while the app is in the foreground. The desktop screen remains a
+placeholder and does not yet receive events or execute mouse clicks.
 
 ## Project architecture
 
@@ -28,18 +28,36 @@ The project follows these standards as it is developed:
 ## Getting started
 
 Install the [Flutter SDK](https://docs.flutter.dev/get-started/install) and
-configure a supported development target. From the project root:
+configure an Android device or emulator. Copy `.env-example` to `.env` in the
+project root and set `HOST` to the server's reachable hostname or IP address
+and `PORT` to its port. On an Android emulator, `localhost` refers to the
+emulator rather than your development machine; use an address reachable from
+the emulator or device. Then, from the project root:
 
 ```sh
 flutter pub get
 flutter run
 ```
 
-Select a device when prompted. The current platform selection treats Android as
-mobile and other targets as desktop; this does not imply the remote-clicker
-features are supported yet.
+Select an Android device when prompted. Enter the same room code used by the
+other client, then tap **Connect**. The room code is saved locally, but the
+connection must be started manually each time; use **Retry connection** after a
+connection failure or **Connect** after a disconnect. The status indicator
+shows whether the socket is connecting, connected, disconnected, or in error.
+While connected and the app is foregrounded, each volume-up press sends one
+`click` event with an empty payload. The button does not change volume, holding
+it does not repeat clicks, and presses made while disconnected are discarded
+with feedback. A socket send does not guarantee delivery or a desktop click.
 
-The repository includes `.env-example` as a starting point for local
-configuration. Copy it to `.env` and adjust the values for your environment
-when configuration loading is implemented. `.env` is ignored by Git; do not put
-secrets in a Flutter app's bundled assets.
+The app connects as `master` to
+`ws://HOST:PORT/ws/pcautomation/ROOM?role=master`; room codes may contain only
+letters, digits, hyphens, and underscores. See the
+[server integration guide](https://raw.githubusercontent.com/fshangala/lambo_server/refs/heads/main/INTEGRATION.md)
+for the protocol. Android permits cleartext networking for this `ws://`
+connection, which is not encrypted. Use a trusted network.
+
+The `.env` file is ignored by Git but bundled into the application at build
+time, not read from the developer's current directory at runtime. Anyone with
+the app can extract it, so do not put secrets in it. Create this file before
+running or building the app. The current platform selection treats Android as
+mobile and other targets as desktop.
